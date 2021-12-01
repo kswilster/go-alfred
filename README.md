@@ -1,6 +1,6 @@
 [Go Links](https://app.golinks.io/) Workflow for [Alfred](http://www.alfredapp.com)
 ==============================
-#### [DOWNLOAD](https://github.com/kswilster/go-alfred/releases/download/1.0.0/Go.Alfred.alfredworkflow)
+#### [DOWNLOAD](https://github.com/kswilster/alfred-cdnjs/releases/download/1.1.0/CDNJS.alfredworkflow)
 
 Quickly Launch Go links from Alfred
 
