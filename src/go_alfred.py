@@ -4,22 +4,32 @@ import sys
 import argparse
 from workflow import Workflow, ICON_WEB, ICON_WARNING, web
 
+
+# Retrieve all Go Links in JSON format
 def get_all_go_links(api_key):
-    """Retrieve all Go Links in JSON format
-    """
     url = 'https://api.golinks.io/golinks'
-    params = dict(limit=100)
+    limit = 100
+    offset = 0
+    last_page = False
     headers = dict(Authorization="Bearer %s" %(api_key))
+    links = []
 
-    r = web.get(url, params, headers)
+    while not last_page:
+      params = dict(limit=limit, offset=offset)
 
-    # throw an error if request failed
-    # Workflow will catch this and show it to the user
-    r.raise_for_status()
+      r = web.get(url, params, headers)
 
-    # Parse the JSON returned by go and extract the links
-    response = r.json()
-    links = response['results']
+      # throw an error if request failed
+      # Workflow will catch this and show it to the user
+      r.raise_for_status()
+
+      # Parse the JSON returned by go and extract the links
+      response = r.json()
+      total_results = response['metadata']['total_results']
+      links += response['results']
+      if (limit + offset >= total_results):
+        last_page = True
+      offset += limit
 
     return links
 
@@ -69,8 +79,13 @@ def main(wf):
     # View GO Links
     ####################################################################
 
+    # Retrieve links from cache if available
+    # Cache is invalidated after 2 minutes
+    def get_go_links_with_api_key():
+        return get_all_go_links(api_key)
+
+    links = wf.cached_data('links', get_go_links_with_api_key, max_age=60*2)
     query = args.query
-    links = get_all_go_links(api_key)
 
     # If script was passed a query, use it to filter links
     if query:
