@@ -4,7 +4,6 @@ import sys
 import argparse
 from workflow import Workflow, ICON_WEB, ICON_WARNING, web
 
-
 # Retrieve all Go Links in JSON format
 def get_all_go_links(api_key):
     url = 'https://api.golinks.io/golinks'
@@ -37,6 +36,7 @@ def get_all_go_links(api_key):
 def search_key_for_link(link):
      elements = []
      elements.append(link['name'])  # name
+     elements.append(link['description']) # description
      return u' '.join(elements)
 
 def main(wf):
@@ -47,26 +47,33 @@ def main(wf):
     # value to 'apikey' (dest). This will be called from a separate "Run Script"
     # action with the API key
     parser.add_argument('--setkey', dest='apikey', nargs='?', default=None)
+    # arg for clearing api key
+    parser.add_argument('--clearkey', dest='clearkey', nargs='?', const=True)
     # add an optional query and save it to 'query'
     parser.add_argument('query', nargs='?', default=None)
     # parse the script's arguments
     args = parser.parse_args(wf.args)
 
     ####################################################################
-    # Save the provided API key
-    ####################################################################
+    # Save or Clear an API key
+    #####################################################################
 
-    # decide what to do based on arguments
-    if args.apikey:  # Script was passed an API key
-        # save the key
+    # clear key
+    if args.clearkey:
+      wf.settings['api_key'] = False
+      return 0
+
+    # save key
+    if args.apikey:
         wf.settings['api_key'] = args.apikey
-        return 0  # 0 means script exited cleanly
+        return 0
 
     ####################################################################
     # Check that we have an API key saved
     ####################################################################
 
     api_key = wf.settings.get('api_key', None)
+
     if not api_key:  # API key has not yet been set
         wf.add_item('No API key set.',
                     'Please use gosetkey to set your GoLinks API key.',
@@ -80,11 +87,11 @@ def main(wf):
     ####################################################################
 
     # Retrieve links from cache if available
-    # Cache is invalidated after 2 minutes
+    # Cache is invalidated after 24 hours
     def get_go_links_with_api_key():
         return get_all_go_links(api_key)
 
-    links = wf.cached_data('links', get_go_links_with_api_key, max_age=60*2)
+    links = wf.cached_data('links', get_go_links_with_api_key, max_age=60*60*24)
     query = args.query
 
     # If script was passed a query, use it to filter links
@@ -95,7 +102,7 @@ def main(wf):
     # the list of results for Alfred
     for link in links:
         wf.add_item(title=link['name'],
-                    subtitle=link['url'],
+                    subtitle=link['description'],
                     arg=link['name'],
                     valid=True,
                     icon=ICON_WEB)

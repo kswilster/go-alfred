@@ -1,5 +1,6 @@
 # Alfred-project files
 src/info.plist
+*.alfredworkflow
 
 # etc
 .DS_Store
