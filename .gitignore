@@ -4,6 +4,7 @@ src/info.plist
 
 # etc
 .DS_Store
+.vscode
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
