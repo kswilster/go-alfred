@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 import sys
+import os
 import argparse
 from workflow import Workflow, ICON_WEB, ICON_WARNING, web
 
@@ -100,12 +101,14 @@ def main(wf):
 
     # Loop through the returned links and adds an item for each to
     # the list of results for Alfred
+    icon_go_link = wf.workflowfile('icon.png')
+
     for link in links:
         wf.add_item(title=link['name'],
                     subtitle=link['description'],
                     arg=link['name'],
                     valid=True,
-                    icon=ICON_WEB)
+                    icon=icon_go_link)
 
     # Send the results to Alfred as XML
     wf.send_feedback()
