@@ -1,13 +1,13 @@
 [Go Links](https://app.golinks.io/) Workflow for [Alfred](http://www.alfredapp.com)
 ==============================
-#### [DOWNLOAD](https://github.com/kswilster/alfred-cdnjs/releases/download/1.1.0/CDNJS.alfredworkflow)
+#### [DOWNLOAD](https://github.com/kswilster/go-alfred/releases/download/1.1.0/Go.Alfred.alfredworkflow)
 
 Quickly Launch Go links from Alfred
 
 Setup
 -----
 ### Install this workflow
- - [Download it](https://github.com/kswilster/alfred-cdnjs/releases/download/1.1.0/CDNJS.alfredworkflow)
+ - [Download it](https://github.com/kswilster/go-alfred/releases/download/1.1.0/Go.Alfred.alfredworkflow)
  - Double click to install
 
 ### Set your GoLinks API token
