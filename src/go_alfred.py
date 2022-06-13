@@ -88,11 +88,11 @@ def main(wf):
     ####################################################################
 
     # Retrieve links from cache if available
-    # Cache is invalidated after 24 hours
+    # Cache is invalidated after 7 days
     def get_go_links_with_api_key():
         return get_all_go_links(api_key)
 
-    links = wf.cached_data('links', get_go_links_with_api_key, max_age=60*60*24)
+    links = wf.cached_data('links', get_go_links_with_api_key, max_age=60*60*24*7)
     query = args.query
 
     # If script was passed a query, use it to filter links
